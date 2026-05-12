@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk ls *)",
+      "Bash(bun create *)",
+      "Bash(bun x *)",
+      "Bash(bun --version)",
+      "Bash(cp -r /c/dev/lab/poker/poker-temp/. /c/dev/lab/poker/)",
+      "Bash(rm -rf /c/dev/lab/poker/poker-temp)",
+      "Bash(bun install *)",
+      "Bash(bun add *)",
+      "Bash(rtk read *)",
+      "Bash(rtk grep *)"
+    ]
+  }
+}

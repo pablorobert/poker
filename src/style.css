@@ -1,0 +1,219 @@
+/* === Casino Theme Variables === */
+:root {
+  --felt-green: #1a6b3c;
+  --felt-dark: #145c32;
+  --felt-light: #1e7a42;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --gold-dark: #8b6914;
+  --card-white: #fafafa;
+  --card-red: #cc2222;
+  --chip-blue: #1a3a5c;
+  --chip-red: #8b1c1c;
+  --chip-black: #1a1a1a;
+  --bg-dark: #0a0f1a;
+  --bg-surface: #0d1420;
+  --bg-elevated: #141c2e;
+  --text-primary: #e8e8e8;
+  --text-secondary: rgba(255,255,255,0.5);
+  --text-muted: rgba(255,255,255,0.25);
+}
+
+/* === Reset === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Typography === */
+h1, h2, h3 {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* === Utility Classes === */
+.glow-gold {
+  text-shadow: 0 0 10px rgba(201,168,76,0.6), 0 0 20px rgba(201,168,76,0.3);
+}
+
+.glow-green {
+  text-shadow: 0 0 10px rgba(46,160,70,0.6), 0 0 20px rgba(46,160,70,0.3);
+}
+
+.glow-border-gold {
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.4), 0 0 15px rgba(201,168,76,0.2);
+}
+
+/* === Button base === */
+button {
+  font-family: inherit;
+}
+
+.btn-action {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: #1a0a00;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(201,168,76,0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(201,168,76,0.5);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #c62828, #8b0000);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(198,40,40,0.35);
+}
+
+.btn-danger:hover {
+  box-shadow: 0 6px 20px rgba(198,40,40,0.5);
+}
+
+/* === Animations === */
+@keyframes deal-card {
+  from {
+    transform: translateY(-100px) rotateX(45deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flip-card {
+  0% { transform: rotateY(180deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+@keyframes chip-fly {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  50% { transform: translate(var(--tx, 50px), var(--ty, -50px)) scale(1.2); }
+  100% { transform: translate(var(--tx2, 100px), var(--ty2, 0px)) scale(0.3); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(201,168,76,0.3), 0 0 10px rgba(201,168,76,0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(201,168,76,0.6), 0 0 30px rgba(201,168,76,0.4);
+  }
+}
+
+@keyframes thinking-dots {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-once {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.pulse-once {
+  animation: pulse-once 0.5s ease;
+}
+
+/* Chip fly particle */
+.chip-fly-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* === Casino background === */
+.casino-bg {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(10, 40, 20, 0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(15, 30, 50, 0.3) 0%, transparent 60%),
+    var(--bg-dark);
+}
+
+/* === Focus visible === */
+:focus-visible {
+  outline: 2px solid rgba(201,168,76,0.5);
+  outline-offset: 2px;
+}
+
+/* === Selection === */
+::selection {
+  background: rgba(201,168,76,0.3);
+  color: white;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+}
