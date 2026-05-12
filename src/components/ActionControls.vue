@@ -24,7 +24,7 @@
               class="raise-slider"
             />
             <div class="raise-amount-display">
-              <span class="raise-label">RAISE TO</span>
+              <span class="raise-label">{{ t('action.raiseTo') }}</span>
               <span class="raise-value">${{ raiseAmount }}</span>
             </div>
           </div>
@@ -39,7 +39,7 @@
           @click="handleFold"
         >
           <span class="btn-icon">✕</span>
-          <span class="btn-label">Fold</span>
+          <span class="btn-label">{{ t('action.fold') }}</span>
         </button>
 
         <button
@@ -48,7 +48,7 @@
           @click="handleCheck"
         >
           <span class="btn-icon">✓</span>
-          <span class="btn-label">Check</span>
+          <span class="btn-label">{{ t('action.check') }}</span>
         </button>
 
         <button
@@ -57,7 +57,7 @@
           @click="handleCall"
         >
           <span class="btn-icon">→</span>
-          <span class="btn-label">Call</span>
+          <span class="btn-label">{{ t('action.call') }}</span>
           <span class="btn-amount">${{ callAmount }}</span>
         </button>
 
@@ -68,7 +68,7 @@
           @click="toggleRaisePanel"
         >
           <span class="btn-icon">↑</span>
-          <span class="btn-label">Raise</span>
+          <span class="btn-label">{{ t('action.raise') }}</span>
           <span class="btn-amount">${{ raiseAmount }}</span>
         </button>
 
@@ -78,7 +78,7 @@
           @click="handleRaise"
         >
           <span class="btn-icon">✓</span>
-          <span class="btn-label">Confirm</span>
+          <span class="btn-label">{{ t('action.confirm') }}</span>
         </button>
 
         <button
@@ -87,7 +87,7 @@
           @click="handleAllIn"
         >
           <span class="btn-icon">⚡</span>
-          <span class="btn-label">All-In</span>
+          <span class="btn-label">{{ t('action.allIn') }}</span>
           <span class="btn-amount">${{ allInAmount }}</span>
         </button>
       </div>
@@ -103,6 +103,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
 import type { ValidAction, BetAction } from '../models/index'
+import { useLocale } from '../composables/useLocale'
 
 const props = defineProps<{
   show: boolean
@@ -117,6 +118,7 @@ const emit = defineEmits<{
   action: [action: BetAction, amount?: number]
 }>()
 
+const { t } = useLocale()
 const showRaisePanel = ref(false)
 const raiseAmount = ref(0)
 const timerPercent = ref(100)
@@ -143,10 +145,10 @@ const raisePresets = computed(() => {
   const min = minRaiseAmount.value
   const max = maxRaiseAmount.value
   const presets = [
-    { label: 'Min', amount: min },
-    { label: '½ Pot', amount: Math.min(max, Math.max(min, Math.floor(pot / 2))) },
-    { label: 'Pot', amount: Math.min(max, Math.max(min, pot)) },
-    { label: '2x Pot', amount: Math.min(max, Math.max(min, pot * 2)) },
+    { label: t('action.min'), amount: min },
+    { label: t('action.halfPot'), amount: Math.min(max, Math.max(min, Math.floor(pot / 2))) },
+    { label: t('action.pot'), amount: Math.min(max, Math.max(min, pot)) },
+    { label: t('action.2xPot'), amount: Math.min(max, Math.max(min, pot * 2)) },
   ]
   return presets.filter((p, i, arr) =>
     p.amount <= max && arr.findIndex(x => x.amount === p.amount) === i

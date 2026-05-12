@@ -1,12 +1,12 @@
 <template>
   <div class="game-log" :class="{ collapsed: isCollapsed }">
     <div class="log-header" @click="isCollapsed = !isCollapsed">
-      <span class="log-title">Hand History</span>
+      <span class="log-title">{{ t('log.title') }}</span>
       <span class="log-toggle">{{ isCollapsed ? '◀' : '▶' }}</span>
     </div>
     <div v-if="!isCollapsed" class="log-body">
       <div v-if="recentActions.length === 0" class="log-empty">
-        No actions yet
+        {{ t('log.empty') }}
       </div>
       <TransitionGroup name="log-item" tag="div" class="log-actions">
         <div
@@ -20,7 +20,7 @@
           <span v-if="bet.amount > 0" class="entry-amount">${{ bet.amount }}</span>
         </div>
       </TransitionGroup>
-      <div v-if="history.length > 0" class="log-section-title">Past Hands</div>
+      <div v-if="history.length > 0" class="log-section-title">{{ t('log.pastHands') }}</div>
       <div
         v-for="hand in recentHistory"
         :key="hand.roundNumber"
@@ -42,26 +42,28 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { BetRecord, HandHistoryEntry, BetAction } from '../models/index'
+import { useLocale } from '../composables/useLocale'
 
 const props = defineProps<{
   recentBets: BetRecord[]
   history: HandHistoryEntry[]
 }>()
 
+const { t } = useLocale()
 const isCollapsed = ref(false)
 
 const recentActions = computed(() => [...props.recentBets].reverse().slice(0, 15))
 const recentHistory = computed(() => [...props.history].reverse().slice(0, 5))
 
 function actionLabel(action: BetAction): string {
-  const labels: Record<BetAction, string> = {
-    fold: 'folds',
-    check: 'checks',
-    call: 'calls',
-    raise: 'raises',
-    'all-in': 'all-in!'
+  const keyMap: Record<BetAction, Parameters<typeof t>[0]> = {
+    fold: 'log.folds',
+    check: 'log.checks',
+    call: 'log.calls',
+    raise: 'log.raises',
+    'all-in': 'log.allIn'
   }
-  return labels[action]
+  return t(keyMap[action])
 }
 </script>
 

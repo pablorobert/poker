@@ -8,6 +8,11 @@
       <div class="bg-card bg-card-4">♣</div>
     </div>
 
+    <!-- Language toggle top-right -->
+    <div class="lang-corner">
+      <LanguageToggle />
+    </div>
+
     <div class="lobby-container">
       <!-- Logo -->
       <div class="lobby-logo">
@@ -22,23 +27,22 @@
       <!-- Resume game button -->
       <div v-if="hasSavedGame" class="resume-section">
         <button class="btn-resume" @click="handleResume">
-          <span>↩</span>
-          Resume Saved Game
+          {{ t('lobby.resume') }}
         </button>
       </div>
 
       <!-- Setup form -->
       <div class="setup-card">
-        <h2 class="setup-title">New Game</h2>
+        <h2 class="setup-title">{{ t('lobby.newGame') }}</h2>
 
         <!-- Player name -->
         <div class="form-group">
-          <label class="form-label">Your Name</label>
+          <label class="form-label">{{ t('lobby.yourName') }}</label>
           <input
             v-model="playerName"
             type="text"
             class="form-input"
-            placeholder="Enter your name"
+            placeholder="Player 1"
             maxlength="14"
             @keyup.enter="handleStart"
           />
@@ -46,7 +50,7 @@
 
         <!-- CPU Count -->
         <div class="form-group">
-          <label class="form-label">Opponents</label>
+          <label class="form-label">{{ t('lobby.opponents') }}</label>
           <div class="option-group">
             <button
               v-for="n in [1, 2, 3]"
@@ -62,7 +66,7 @@
 
         <!-- Starting chips -->
         <div class="form-group">
-          <label class="form-label">Starting Chips</label>
+          <label class="form-label">{{ t('lobby.startingChips') }}</label>
           <div class="option-group">
             <button
               v-for="chips in [500, 1000, 2000, 5000]"
@@ -78,7 +82,7 @@
 
         <!-- Blinds -->
         <div class="form-group">
-          <label class="form-label">Blinds</label>
+          <label class="form-label">{{ t('lobby.blinds') }}</label>
           <div class="option-group">
             <button
               v-for="blind in blindOptions"
@@ -95,13 +99,13 @@
         <!-- Deal button -->
         <button class="btn-deal" @click="handleStart">
           <span class="deal-icon">🃏</span>
-          DEAL ME IN
+          {{ t('lobby.dealMeIn') }}
         </button>
       </div>
 
       <!-- Quick rules -->
       <div class="quick-rules">
-        <span>Texas Hold'em · No Limit · {{ cpuCount + 1 }}-Player</span>
+        <span>{{ t('lobby.tagline', { n: cpuCount + 1 }) }}</span>
       </div>
     </div>
   </div>
@@ -111,10 +115,13 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '../stores/gameStore'
+import { useLocale } from '../composables/useLocale'
 import type { GameSettings } from '../models/index'
+import LanguageToggle from '../components/LanguageToggle.vue'
 
 const router = useRouter()
 const store = useGameStore()
+const { t } = useLocale()
 
 const playerName = ref('Player 1')
 const cpuCount = ref(2)
@@ -143,7 +150,6 @@ function handleStart(): void {
   }
   store.resetGame()
   store.startGame(settings)
-  // Set player name
   if (store.gameState && playerName.value.trim()) {
     const humanIdx = store.gameState.players.findIndex(p => p.type === 'human')
     if (humanIdx !== -1) {
@@ -194,6 +200,14 @@ function handleResume(): void {
 @keyframes float-card {
   0%, 100% { transform: translateY(0) rotate(-5deg); }
   50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+/* Language toggle */
+.lang-corner {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
 }
 
 .lobby-container {

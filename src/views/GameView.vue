@@ -10,7 +10,7 @@
       </div>
       <div class="header-right">
         <div v-if="humanPlayer" class="player-chips-display">
-          <span class="chips-label">YOUR CHIPS</span>
+          <span class="chips-label">{{ t('game.yourChips') }}</span>
           <span class="chips-value" :class="{ 'chips-low': (humanPlayer.chips ?? 0) < (settings?.bigBlind ?? 10) * 5 }">
             ${{ (humanPlayer.chips ?? 0).toLocaleString() }}
           </span>
@@ -22,10 +22,10 @@
     <!-- Menu dropdown -->
     <Transition name="menu-drop">
       <div v-if="showMenu" class="game-menu" @click.stop>
-        <button class="menu-item" @click="handleNewGame">🃏 New Game</button>
-        <button class="menu-item" @click="handleQuit">🚪 Quit to Lobby</button>
+        <button class="menu-item" @click="handleNewGame">{{ t('game.newGame') }}</button>
+        <button class="menu-item" @click="handleQuit">{{ t('game.quitLobby') }}</button>
         <div class="menu-divider"></div>
-        <div class="menu-info">Round {{ roundNumber }} · {{ phaseLabel }}</div>
+        <div class="menu-info">{{ t('game.round') }} {{ roundNumber }} · {{ phaseLabel }}</div>
       </div>
     </Transition>
     <div v-if="showMenu" class="menu-backdrop" @click="showMenu = false"></div>
@@ -71,7 +71,7 @@
     <Transition name="fade">
       <div v-if="isAITurn" class="ai-thinking-bar">
         <span class="thinking-name">{{ currentPlayer?.name }}</span>
-        <span class="thinking-text">is thinking</span>
+        <span class="thinking-text">{{ t('ai.thinking') }}</span>
         <span class="thinking-dots-bar">
           <span></span><span></span><span></span>
         </span>
@@ -90,12 +90,12 @@
       <div v-if="gameStatus === 'over'" class="game-over-overlay">
         <div class="game-over-content">
           <div class="game-over-icon">🃏</div>
-          <div class="game-over-title">GAME OVER</div>
+          <div class="game-over-title">{{ t('gameover.title') }}</div>
           <div class="game-over-sub">
-            {{ humanPlayer && humanPlayer.chips > 0 ? '🏆 You Win the Tournament!' : '💀 You\'re Eliminated!' }}
+            {{ humanPlayer && humanPlayer.chips > 0 ? t('gameover.win') : t('gameover.lose') }}
           </div>
           <button class="btn-play-again" @click="handleQuit">
-            Play Again
+            {{ t('gameover.playAgain') }}
           </button>
         </div>
       </div>
@@ -108,6 +108,7 @@ import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '../stores/gameStore'
 import { useSound } from '../composables/useSound'
+import { useLocale } from '../composables/useLocale'
 import type { BetAction } from '../models/index'
 import PokerTable from '../components/PokerTable.vue'
 import ActionControls from '../components/ActionControls.vue'
@@ -118,6 +119,7 @@ import SoundToggle from '../components/SoundToggle.vue'
 const router = useRouter()
 const store = useGameStore()
 const { playSound } = useSound()
+const { t } = useLocale()
 
 const showMenu = ref(false)
 
@@ -153,16 +155,8 @@ const recentBets = computed(() =>
 )
 
 const phaseLabel = computed(() => {
-  const labels: Record<string, string> = {
-    'waiting': 'Waiting',
-    'pre-flop': 'Pre-Flop',
-    'flop': 'Flop',
-    'turn': 'Turn',
-    'river': 'River',
-    'showdown': 'Showdown',
-    'end-round': 'End Round'
-  }
-  return labels[phase.value ?? 'waiting'] ?? 'Playing'
+  const key = `phase.${phase.value ?? 'waiting'}` as Parameters<typeof t>[0]
+  return t(key)
 })
 
 // Sound effects

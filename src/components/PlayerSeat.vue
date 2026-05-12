@@ -57,9 +57,9 @@
     </div>
 
     <!-- Status overlay -->
-    <div v-if="player.status === 'folded'" class="status-overlay folded-overlay">FOLDED</div>
-    <div v-if="player.status === 'all-in'" class="status-overlay allin-overlay">ALL-IN</div>
-    <div v-if="player.status === 'sitting-out'" class="status-overlay sitout-overlay">OUT</div>
+    <div v-if="player.status === 'folded'" class="status-overlay folded-overlay">{{ t('status.folded') }}</div>
+    <div v-if="player.status === 'all-in'" class="status-overlay allin-overlay">{{ t('status.allIn') }}</div>
+    <div v-if="player.status === 'sitting-out'" class="status-overlay sitout-overlay">{{ t('status.out') }}</div>
 
     <!-- Winner celebration -->
     <transition name="winner-pop">
@@ -75,6 +75,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Player } from '../models/index'
+import { useLocale } from '../composables/useLocale'
 import PlayingCard from './PlayingCard.vue'
 import ChipStack from './ChipStack.vue'
 import DealerButton from './DealerButton.vue'
@@ -87,6 +88,7 @@ const props = defineProps<{
 }>()
 
 const cpuCardsVisible = computed(() => props.showCpuCards ?? false)
+const { t } = useLocale()
 
 function formatChips(amount: number): string {
   if (amount >= 1000) return `$${(amount / 1000).toFixed(1)}k`

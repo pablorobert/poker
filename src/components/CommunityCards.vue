@@ -25,21 +25,20 @@
 import { computed } from 'vue'
 import type { Card, GamePhase } from '../models/index'
 import PlayingCard from './PlayingCard.vue'
+import { useLocale } from '../composables/useLocale'
 
 const props = defineProps<{
   cards: Card[]
   phase: GamePhase | null
 }>()
 
+const { t } = useLocale()
+
 const phaseLabel = computed(() => {
-  const labels: Partial<Record<GamePhase, string>> = {
-    'pre-flop': 'PRE-FLOP',
-    'flop': 'FLOP',
-    'turn': 'TURN',
-    'river': 'RIVER',
-    'showdown': 'SHOWDOWN'
-  }
-  return props.phase ? labels[props.phase] ?? '' : ''
+  if (!props.phase) return ''
+  const phases: GamePhase[] = ['pre-flop', 'flop', 'turn', 'river', 'showdown']
+  if (!phases.includes(props.phase)) return ''
+  return t(`phase.${props.phase}` as Parameters<typeof t>[0]).toUpperCase()
 })
 
 const upcomingCount = computed(() => {

@@ -7,7 +7,7 @@
         </div>
         <div class="winner-crown-big">👑</div>
         <div class="winner-title">
-          {{ results.length > 1 ? 'SPLIT POT!' : 'WINNER!' }}
+          {{ results.length > 1 ? t('winner.split') : t('winner.winner') }}
         </div>
         <div
           v-for="result in results"
@@ -19,7 +19,7 @@
           <div class="winner-hand-desc">{{ result.handDescription }}</div>
           <div class="winner-chips">+${{ result.amount.toLocaleString() }}</div>
         </div>
-        <div class="dismiss-hint">Click anywhere to continue</div>
+        <div class="dismiss-hint">{{ t('winner.dismiss') }}</div>
       </div>
     </div>
   </Transition>
@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import type { WinResult } from '../models/index'
+import { useLocale } from '../composables/useLocale'
 
 defineProps<{
   show: boolean
@@ -36,6 +37,8 @@ defineProps<{
 defineEmits<{
   dismiss: []
 }>()
+
+const { t } = useLocale()
 </script>
 
 <style scoped>
