@@ -75,7 +75,7 @@ function getSeatStyle(idx: number, total: number): Record<string, string> {
   const radian = (angle * Math.PI) / 180
 
   const rx = total === 3 ? 54 : 46
-  const ry = total === 3 ? 38 : 44
+  const ry = total === 3 ? 42 : 44
 
   const x = 50 + rx * Math.cos(radian)
   const y = 50 + ry * Math.sin(radian)
