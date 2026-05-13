@@ -219,7 +219,11 @@ function handleAllIn(): void {
 
 <style scoped>
 .action-controls {
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
   display: flex;
   flex-direction: column;
   gap: 10px;
