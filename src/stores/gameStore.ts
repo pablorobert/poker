@@ -38,6 +38,7 @@ export const useGameStore = defineStore('game', () => {
   // State
   const gameState = ref<GameState | null>(loadFromStorage())
   const aiThinking = ref(false)
+  const isPaused = ref(false)
   const winResults = ref<WinResult[]>([])
   const showWinner = ref(false)
   const winnerDismissTimer = ref<ReturnType<typeof setTimeout> | null>(null)
@@ -61,6 +62,7 @@ export const useGameStore = defineStore('game', () => {
 
   const isHumanTurn = computed<boolean>(() => {
     if (!gameState.value?.round) return false
+    if (isPaused.value) return false
     const player = currentPlayer.value
     if (!player) return false
     return player.type === 'human' && player.status === 'active' && !aiThinking.value
@@ -235,6 +237,22 @@ export const useGameStore = defineStore('game', () => {
     winResults.value = []
   }
 
+  function pauseGame(): void {
+    if (!gameState.value || gameState.value.gameStatus !== 'playing') return
+    isPaused.value = true
+    if (pendingAITimer.value) {
+      clearTimeout(pendingAITimer.value)
+      pendingAITimer.value = null
+    }
+    aiThinking.value = false
+  }
+
+  function unpauseGame(): void {
+    if (!isPaused.value) return
+    isPaused.value = false
+    scheduleAIIfNeeded()
+  }
+
   function toggleSound(): void {
     if (!gameState.value) return
     gameState.value = {
@@ -250,6 +268,7 @@ export const useGameStore = defineStore('game', () => {
     // State
     gameState,
     aiThinking,
+    isPaused,
     winResults,
     showWinner,
     // Getters
@@ -274,6 +293,8 @@ export const useGameStore = defineStore('game', () => {
     nextRound,
     resetGame,
     dismissWinner,
+    pauseGame,
+    unpauseGame,
     toggleSound
   }
 })

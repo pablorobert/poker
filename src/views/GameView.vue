@@ -15,6 +15,14 @@
             ${{ (humanPlayer.chips ?? 0).toLocaleString() }}
           </span>
         </div>
+        <button
+          v-if="gameStatus === 'playing'"
+          class="btn-icon-sm btn-pause"
+          :title="isPaused ? 'Retomar' : 'Pausar'"
+          @click="togglePause"
+        >
+          {{ isPaused ? '▶' : '⏸' }}
+        </button>
         <SoundToggle :enabled="settings?.soundEnabled ?? true" @toggle="store.toggleSound()" />
       </div>
     </header>
@@ -85,6 +93,17 @@
       @dismiss="store.dismissWinner()"
     />
 
+    <!-- Pause overlay -->
+    <Transition name="fade">
+      <div v-if="isPaused" class="pause-overlay" @click="togglePause">
+        <div class="pause-content">
+          <div class="pause-icon">⏸</div>
+          <div class="pause-title">PAUSADO</div>
+          <div class="pause-hint">Clique para retomar</div>
+        </div>
+      </div>
+    </Transition>
+
     <!-- Game over screen -->
     <Transition name="fade">
       <div v-if="gameStatus === 'over'" class="game-over-overlay">
@@ -122,6 +141,16 @@ const { playSound } = useSound()
 const { t } = useLocale()
 
 const showMenu = ref(false)
+
+const isPaused = computed(() => store.isPaused)
+
+function togglePause(): void {
+  if (store.isPaused) {
+    store.unpauseGame()
+  } else {
+    store.pauseGame()
+  }
+}
 
 const players = computed(() => store.players)
 const communityCards = computed(() => store.communityCards)
@@ -431,6 +460,48 @@ function handleQuit(): void {
 @keyframes dot-bounce {
   0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
   30% { transform: translateY(-5px); opacity: 1; }
+}
+
+.btn-pause {
+  font-size: 14px;
+}
+
+/* Pause overlay */
+.pause-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 150;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.pause-content {
+  text-align: center;
+}
+
+.pause-icon {
+  font-size: 64px;
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.pause-title {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(201, 168, 76, 0.4);
+  margin-bottom: 12px;
+}
+
+.pause-hint {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 2px;
 }
 
 /* Game over overlay */

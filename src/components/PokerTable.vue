@@ -62,17 +62,23 @@ function isActivePlayer(idx: number): boolean {
 
 // Position seats in an oval around the table
 function getSeatStyle(idx: number, total: number): Record<string, string> {
-  // Oval positions: distribute evenly, human (idx=0) at bottom center
-  const angle = (idx / total) * 360 - 90 // Start from bottom (270°) → -90
-  const radianX = (angle * Math.PI) / 180
-  const radianY = (angle * Math.PI) / 180
+  let angle: number
 
-  // Oval radii (as % of container)
-  const rx = 42 // horizontal radius %
-  const ry = 36 // vertical radius %
+  if (total === 2) {
+    // Heads-up: human (idx=0) right, CPU (idx=1) left
+    angle = idx === 0 ? 0 : 180
+  } else {
+    // 3-4 players: distribute evenly, human (idx=0) at bottom center
+    angle = (idx / total) * 360 + 90 // +90 = bottom in CSS coords (y-axis inverted)
+  }
 
-  const x = 50 + rx * Math.cos(radianX)
-  const y = 50 + ry * Math.sin(radianY)
+  const radian = (angle * Math.PI) / 180
+
+  const rx = total === 3 ? 54 : 46
+  const ry = total === 3 ? 38 : 44
+
+  const x = 50 + rx * Math.cos(radian)
+  const y = 50 + ry * Math.sin(radian)
 
   return {
     left: `${x}%`,

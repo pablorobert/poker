@@ -19,7 +19,11 @@
           :card="card"
           :face-down="player.type === 'cpu' && !cpuCardsVisible"
           size="sm"
-          :style="{ transform: `rotate(${idx === 0 ? -6 : 6}deg)` }"
+          :style="{
+            transform: `rotate(${idx === 0 ? -6 : 6}deg) translateX(${idx === 0 ? -4 : 4}px)`,
+            position: 'relative',
+            zIndex: idx + 1
+          }"
         />
       </template>
       <template v-else>
@@ -141,7 +145,7 @@ function formatChips(amount: number): string {
 
 .seat-cards {
   display: flex;
-  gap: -4px;
+  gap: 2px;
   margin-bottom: 2px;
   position: relative;
 }
