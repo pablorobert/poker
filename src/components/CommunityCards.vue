@@ -77,6 +77,7 @@ const upcomingCount = computed(() => {
   display: flex;
   gap: 8px;
   align-items: center;
+  position: relative;
 }
 
 .community-card {
@@ -107,6 +108,8 @@ const upcomingCount = computed(() => {
 }
 
 .card-deal-leave-active {
+  position: absolute;
+  pointer-events: none;
   animation: deal-in 0.2s ease reverse;
 }
 
