@@ -184,12 +184,15 @@ export const useGameStore = defineStore('game', () => {
     if (!gameState.value) return
     const results = calculateWinners(gameState.value)
     winResults.value = results
-    showWinner.value = true
 
     if (winnerDismissTimer.value) clearTimeout(winnerDismissTimer.value)
+    // Delay overlay so players can see revealed CPU cards for 2s first
     winnerDismissTimer.value = setTimeout(() => {
-      dismissWinner()
-    }, 4000)
+      showWinner.value = true
+      winnerDismissTimer.value = setTimeout(() => {
+        dismissWinner()
+      }, 4000)
+    }, 2000)
   }
 
   function handleEndRound(): void {
