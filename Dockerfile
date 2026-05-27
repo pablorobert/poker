@@ -1,4 +1,4 @@
-FROM imbios/bun-node:1.3.10-22-alpine AS builder
+FROM imbios/bun-node:1.3.14-22-alpine AS builder
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build
 
-FROM nginx:1.29.5-alpine-slim AS runner
+FROM nginx:1.30.1-alpine-slim AS production
 
 RUN rm -rf /usr/share/nginx/html/*
 
